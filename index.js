@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const { PrismaClient } = require('@prisma/client');
 const bodyParser = require('body-parser');
 
@@ -6,6 +7,7 @@ const app = express();
 const prisma = new PrismaClient();
 
 app.use(bodyParser.json());
+app.use(cors());
 
 app.post('/sensor-data', async (req, res) => {
     const { temperature, humidity } = req.body;
@@ -31,6 +33,19 @@ app.post('/sensor-data', async (req, res) => {
     }
 });
 
+app.get('/api/data', async (req, res) => {
+    try {
+        const sensorData = await prisma.sensorData.findMany({
+            orderBy: {
+                createdAt: 'asc'
+            }
+        });
+        res.json(sensorData);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Une erreur est survenue lors de la récupération des données' });
+    }
+});
 
 const PORT = 3000;
 app.listen(PORT, () => {
