@@ -10,8 +10,10 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 model SensorData {
-  id          Int      @id @default(autoincrement())
-  temperature Float   
-  humidity    Float   
-  createdAt   DateTime @default(now())
+    id          Int      @id @default(autoincrement())
+    temperature Float
+    humidity    Float
+    deviceId    String   // Identifiant unique du dispositif
+    deviceName  String   // Nom facilement identifiable du dispositif
+    createdAt   DateTime @default(now())
 }

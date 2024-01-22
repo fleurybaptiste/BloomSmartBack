@@ -2,13 +2,15 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 const createSensorData = async (req, res) => {
-    const { temperature, humidity } = req.body;
+    const { temperature, humidity, deviceId, deviceName } = req.body;
 
     try {
         const sensorData = await prisma.sensorData.create({
             data: {
                 temperature,
-                humidity
+                humidity,
+                deviceId,
+                deviceName
             },
         });
 
