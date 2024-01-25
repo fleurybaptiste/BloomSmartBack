@@ -3,7 +3,7 @@ const prisma = new PrismaClient();
 const Joi = require('joi');
 const notifier = require('node-notifier');
 
-// Schéma de validation pour la création de données de capteur
+
 const sensorDataSchema = Joi.object({
     temperature: Joi.number().required(),
     humidity: Joi.number().required(),
@@ -11,7 +11,7 @@ const sensorDataSchema = Joi.object({
     deviceName: Joi.string().required()
 });
 
-// Fonction pour créer des données de capteur
+
 const createSensorData = async (req, res) => {
     const { error } = sensorDataSchema.validate(req.body);
     if (error) {
@@ -44,12 +44,11 @@ const createSensorData = async (req, res) => {
 
 // Fonction pour récupérer les données de capteur
 const getSensorData = async (req, res) => {
-    const deviceId = req.query.deviceId; // Récupérer l'identifiant du capteur depuis les paramètres de requête
-
+    const deviceId = req.query.deviceId; 
     try {
         const sensorData = await prisma.sensorData.findMany({
             where: {
-                ...(deviceId && { deviceId: deviceId }), // Filtrer par deviceId si fourni
+                ...(deviceId && { deviceId: deviceId }), 
             },
             orderBy: {
                 createdAt: 'asc'
@@ -85,7 +84,7 @@ const getSensorDataLastHour = async (req, res) => {
             },
         });
 
-        // Vérifier la température pour 'EC:FA:BC:1D:48:A4'
+        // Vérif temp pour la chambre de Juju sous mac :'EC:FA:BC:1D:48:A4'
         if (deviceId === 'EC:FA:BC:1D:48:A4') {
             const latestData = sensorData[sensorData.length - 1];
             if (latestData && latestData.temperature > 20.5) {
